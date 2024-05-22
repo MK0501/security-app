@@ -1,5 +1,6 @@
 package com.example.securityapp.impl;
 
+import com.example.securityapp.exceptions.UserNotFoundException;
 import com.example.securityapp.model.Role;
 import com.example.securityapp.model.User;
 import com.example.securityapp.repo.UserRepo;
@@ -25,7 +26,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUserName(username);
+        return userRepo
+                .findByUserName(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with the name:"+username));
     }
 
     @Override

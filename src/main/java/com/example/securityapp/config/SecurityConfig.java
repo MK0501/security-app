@@ -1,16 +1,12 @@
 package com.example.securityapp.config;
 
 import com.example.securityapp.impl.UserServiceImpl;
-import com.example.securityapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -28,7 +24,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/x/**")
+                        .requestMatchers("/register/**")
                         .permitAll()
                         .requestMatchers("/login/**")
                         .permitAll()

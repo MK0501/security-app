@@ -5,6 +5,8 @@ import com.example.securityapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,7 +31,7 @@ public class Controller {
         return "common page for user and admin";
     }
 
-    @PostMapping("/x")
+    @PostMapping("/register")
     public ResponseEntity saveUser(@RequestBody User user){
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Info", "Registering the user");
@@ -39,4 +41,6 @@ public class Controller {
                 .body(userService.addUser(user)
                 );
     }
+
+
 }
