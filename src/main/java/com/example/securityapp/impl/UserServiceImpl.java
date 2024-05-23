@@ -3,6 +3,7 @@ package com.example.securityapp.impl;
 import com.example.securityapp.exceptions.UserNotFoundException;
 import com.example.securityapp.model.Role;
 import com.example.securityapp.model.User;
+import com.example.securityapp.repo.RoleRepo;
 import com.example.securityapp.repo.UserRepo;
 import com.example.securityapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private RoleRepo roleRepo;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -45,12 +46,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public String addUser(User user) {
         User user1 = user;
         user1.setPassword(passwordEncoder.encode(user.getPassword()));
-        List<Role> roleList = new ArrayList<>();
-        Role role = new Role();
-        role.setRoleId(2L);
-        role.setRoleName("user");
-        roleList.add(role);
-        user1.setRoleList(roleList);
+        Role role = roleRepo.findById(2L).orElseThrow(
+                () -> new UserNotFoundException("role not found")
+        );
+        user1.setRole(role);
         userRepo.save(user1);
         return "user registered succesfully!";
     }

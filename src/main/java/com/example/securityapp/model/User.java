@@ -1,15 +1,14 @@
 package com.example.securityapp.model;
 
+import com.example.securityapp.repo.RoleRepo;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Data
@@ -26,22 +25,21 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Role> roleList;
+    //one user can have only one role
+    @OneToOne(fetch = FetchType.EAGER)
+    Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        for(Role role : roleList) {
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role.getRoleName());
             grantedAuthorityList.add(simpleGrantedAuthority);
-        }
         return grantedAuthorityList;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return userName;
     }
 
     @Override
